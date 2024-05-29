@@ -1,0 +1,167 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+    {% for message in get_flashed_messages() %}
+        
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        
+    {% endfor %}
+
+	<br/>
+
+	<div class="card">
+        <div class="card-header">
+            Item EAN: {{ item.full_item_id }}
+        </div>
+        <div class="card-body">
+   
+             <p class="card-text">
+
+                <div class="container">
+	                <div class="row">
+		                <div class="col-8">
+
+                            <strong>Model:</strong>
+                            {{ item.item_model }}<br/>
+
+                            <strong>Model ID:</strong>
+                            {{ item.item_model_id }}<br/>
+
+                            <strong>Category:</strong>
+                            {{ item.category }}<br/>
+
+                            <strong>City:</strong>
+                            {{ item.city }}<br/>
+
+                            <strong>price:</strong>
+                            {{ item.price }} usd<br/>
+
+                            <strong>Producing Country:</strong>
+                            {{ item.producing_country }}<br/>
+
+                            <strong>Colour:</strong>
+                            {{ item.colour }}<br/>
+
+                            <strong>Manufacturer:</strong>
+                            {{ item.manufacturer }}<br/>
+
+                            <strong>Amount:</strong>
+                            {{ item.amount }}<br/>
+
+                            <strong>Place:</strong>
+                            {{ item.place }}<br/>
+
+    	
+    
+
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#UpdateAmountModal">
+                                Update item amount
+                            </button>
+
+                            <a href="{{url_for('update_item',full_item_id=item.full_item_id)}}" class="btn btn-secondary btn-sm">Update Item</a>
+
+                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#DeleteModal">
+                                Delete Item
+                            </button>
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#DepartureModal">
+                                Departure Item
+                            </button>
+                            <a href="{{url_for('history',full_item_id=item.full_item_id)}}" class="btn btn-secondary btn-sm">Item Actions History</a>
+                            <br/><br/>
+
+    
+	                    </div>
+                        <div class="col-4">
+                            {%if item.img%}
+		                        <img src="{{ url_for('static', filename='img/' + item.img)}}" width="200" align="right">
+                            {%else %}
+                                <img src="{{ url_for('static', filename='img/item_icon.png')}}" width="200" align="right">
+                            {%endif%}
+                            <img src="{{ url_for('static', filename='barcode/' + item.bar_code)}}" width="200" align="right">
+
+                        </div>
+	                </div>
+	            </div>
+            </p>
+
+
+        </div>
+    </div>
+    <br/>
+    <div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="Deleting Item" aria-hidden="true">>
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Deleting Item</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Are You Sure You Want To Delete Item?</p>
+            </div>
+            <div class="modal-footer">
+              <a href="{{url_for('delete_item',full_item_id=item.full_item_id)}}" class="btn btn-danger">Delete Item</a>
+              <a class="btn btn-secondary" data-bs-dismiss="modal">Close</a>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="modal fade" id="UpdateAmountModal" tabindex="-1" aria-labelledby="Update Amount" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Amount Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{url_for('specific_item', full_item_id=item.full_item_id)}}" method="POST">
+                        {{ form.hidden_tag() }}
+                        {{ form.amount.label(class="form-label") }}
+                        {{ form.amount(class="form-control") }}
+                        {% for error in form.amount.errors %}
+                            <div class="alert alert-warning" role="alert">
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+                        <div class="modal-footer">
+                            {{ form.submit(class="btn btn-primary") }}
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="DepartureModal" tabindex="-1" aria-labelledby="Departure" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Departure</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                    <form action="{{ url_for('specific_item', full_item_id=item.full_item_id) }}" method="POST">
+                        {{ form_d.hidden_tag() }}
+                        {{ form_d.city_to.label(class="form-label") }}
+                        {{ form_d.city_to(class="form-control") }}
+                        {{ form_d.amountD.label(class="form-label") }}
+                        {{ form_d.amountD(class="form-control") }}
+                        <div class="modal-footer">
+                            {{ form_d.submit(class="btn btn-primary") }}
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+
+{% endblock %}

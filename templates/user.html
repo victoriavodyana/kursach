@@ -1,0 +1,154 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    {% for message in get_flashed_messages() %}
+        
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        
+    {% endfor %}
+
+	<br/>
+
+<div class="card">
+    <div class="card-header">
+        User: {{ current_user.first_name }} {{ current_user.last_name }}
+    </div>
+    <div class="card-body">
+
+         <p class="card-text">
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-8">
+
+                        <strong>User Id:</strong>
+                        {{ current_user.id }}<br/>
+
+                        <strong>First Name:</strong>
+                        {{ current_user.first_name }}<br/>
+
+                        <strong>Last Name:</strong>
+                        {{ current_user.last_name }}<br/>
+
+                        <strong>Email:</strong>
+                        {{ current_user.email }}<br/>
+
+                        <strong>City:</strong>
+                        {{ city }} <br/>
+    
+                        <br/>
+                        <br/>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#UpdateUserModal">
+                            Update User
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#UpdatePasswordModal">
+                            Update Password
+                        </button>
+
+                        
+
+                        <a href="{{url_for('log_out')}}" class="btn btn-secondary btn-sm">Log Out</a>
+
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#DeleteModal">
+                            Delete User
+                        </button>
+                        <br/><br/>
+
+
+                    </div>
+                    <div class="col-4">
+
+                        <img src="{{ url_for('static', filename='img/user.jpg' )}}" width="200" align="right">
+
+                    </div>
+                </div>
+            </div>
+        </p>
+
+
+    </div>
+</div>
+
+<div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="Deleting Item" aria-hidden="true">>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Deleting User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are You Sure You Want To Delete Profile?</p>
+        </div>
+        <div class="modal-footer">
+          <a href="{{url_for('delete_user')}}" class="btn btn-danger">Delete User</a>
+          <a class="btn btn-secondary" data-bs-dismiss="modal">Close</a>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="UpdateUserModal" tabindex="-1" aria-labelledby="Update Amount" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{url_for('user')}}" method="POST">
+                    {{ form.hidden_tag() }}
+                    {{ form.first_name.label(class="form-label") }}
+                    {{ form.first_name(class="form-control") }}
+                    {{ form.last_name.label(class="form-label") }}
+                    {{ form.last_name(class="form-control") }}
+                    {{ form.email.label(class="form-label") }}
+                    {{ form.email(class="form-control") }}
+                    {{ form.city.label(class="form-label") }}
+                    {{ form.city(class="form-control") }}
+
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control") }}
+
+                    <div class="modal-footer">
+                        {{ form.submit(class="btn btn-primary") }}
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <div class="modal fade" id="UpdatePasswordModal" tabindex="-1" aria-labelledby="Update Amount" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{url_for('user')}}" method="POST">
+                        {{ form_password.hidden_tag() }}
+                        {{ form_password.oldpassword.label(class="form-label") }}
+                        {{ form_password.oldpassword(class="form-control") }}
+                        {{ form_password.password.label(class="form-label") }}
+                        {{ form_password.password(class="form-control") }}
+                        {{ form_password.password2.label(class="form-label") }}
+                        {{ form_password.password2(class="form-control") }}
+        
+                        <div class="modal-footer">
+                            {{ form_password.submit(class="btn btn-primary") }}
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

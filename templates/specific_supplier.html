@@ -1,0 +1,129 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    {% for message in get_flashed_messages() %}
+        
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        
+    {% endfor %}
+
+	<br/>
+
+<div class="card">
+    <div class="card-header">
+        Supplier: {{ supplier.first_name }} {{ supplier.last_name }}
+    </div>
+    <div class="card-body">
+
+         <p class="card-text">
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-8">
+
+                        <strong>Supplier Id:</strong>
+                        {{ supplier.id }}<br/>
+
+                        <strong>First Name:</strong>
+                        {{ supplier.first_name }}<br/>
+
+                        <strong>Last Name:</strong>
+                        {{ supplier.last_name }}<br/>
+
+                        <strong>Email:</strong>
+                        {{ supplier.email }}<br/>
+
+                        <strong>Phone:</strong>
+                        {{ supplier.phone }}<br/>
+
+                        <strong>City:</strong>
+                        {{ supplier.city }}<br/>
+
+    
+                        <br/>
+                        <br/>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#UpdateSupplierModal">
+                            Update Supplier
+                        </button>
+
+
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#DeleteModal">
+                            Delete Supplier
+                        </button>
+                        <br/><br/>
+
+
+                    </div>
+                    <div class="col-4">
+
+                        <img src="{{ url_for('static', filename='img/user.jpg' )}}" width="200" align="right">
+
+                    </div>
+                </div>
+            </div>
+        </p>
+
+
+    </div>
+</div>
+
+<div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="Deleting Item" aria-hidden="true">>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Deleting Supplier</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are You Sure You Want To Delete Supplier?</p>
+        </div>
+        <div class="modal-footer">
+          <a href="{{url_for('delete_supplier', id = supplier.id)}}" class="btn btn-danger">Delete Supplier</a>
+          <a class="btn btn-secondary" data-bs-dismiss="modal">Close</a>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="UpdateSupplierModal" tabindex="-1" aria-labelledby="Update Amount" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Supplier</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{url_for('specific_supplier', id = supplier.id)}}" method="POST">
+                    {{ form.hidden_tag() }}
+
+                    {{ form.first_name.label(class="form-label") }}
+                    {{ form.first_name(class="form-control") }}
+
+                    {{ form.last_name.label(class="form-label") }}
+                    {{ form.last_name(class="form-control") }}
+
+                    {{ form.email.label(class="form-label") }}
+                    {{ form.email(class="form-control") }}
+
+                    {{ form.phone.label(class="form-label") }}
+                    {{ form.phone(class="form-control") }}
+
+                    {{ form.city.label(class="form-label") }}
+                    {{ form.city(class="form-control") }}
+
+                    <div class="modal-footer">
+                        {{ form.submit(class="btn btn-primary") }}
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

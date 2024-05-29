@@ -1,0 +1,79 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    {% for message in get_flashed_messages() %}
+	
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+
+    {% endfor %}
+    <h2> Departures for city: "{{city}}"</h2>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">EAN</th>
+                <th scope="col">Item model</th>
+                <th scope="col">Item model ID</th>
+                <th scope="col">Category</th>
+                <th scope="col">City From</th>
+                <th scope="col">Price</th>
+                <th scope="col">Producing country</th>
+                <th scope="col">Colour</th>
+                <th scope="col">Manufacturer</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Place</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+                <tr>
+                    <th>{{ item.full_item_id }}</th>
+                    <th>{{ item.item_model }}</th>
+                    <th>{{ item.item_model_id }}</th>
+                    <th>{{ item.category }}</th>
+                    <th>{{ item.city_from }}</th>
+                    <th>{{ item.price }} usd</th>
+                    <th>{{ item.producing_country }}</th>
+                    <th>{{ item.colour }}</th>
+                    <th>{{ item.manufacturer }}</th>
+                    <th>{{ item.amount }}</th>
+                    <th>{{ item.place }}</th>
+                    <th>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#AcceptDepartureModal{{ item.full_item_id }}">
+                            Accept The Departure
+                        </button>
+                    </th>
+
+                </tr>
+                <div class="modal fade" id="AcceptDepartureModal{{ item.full_item_id }}" tabindex="-1" aria-labelledby="Departure" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Accept The Departure</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form action="{{ url_for('departure', full_item_id=item.full_item_id) }}" method="POST">
+                                {{ form.hidden_tag() }}
+                                {{ form.place.label(class="form-label") }}
+                                {{ form.place(class="form-control") }}
+                                <div class="modal-footer">
+                                    {{ form.submit(class="btn btn-primary") }}
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    
+
+    
+
+{% endblock %}

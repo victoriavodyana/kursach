@@ -1,0 +1,77 @@
+{% extends 'index.html' %}
+
+{% macro render_row(categories) %}
+    <div class="row">
+        {% for category in categories %}
+        <div class="col-4 mb-4">
+            <div class="card" style="width: 18rem;"> 
+                {%if category.category_img%}
+                <img src="{{ url_for('static', filename='categories/' + category.category_img)}}" class="card-img-top card-img-custom" width="200" align="right"> 
+                {%else %}
+                <img src="{{ url_for('static', filename='img/item_icon.png')}}" width="200" align="right">
+                {%endif%}
+                <div class="card-body">
+                    <h5 class="card-title">{{ category.name }}</h5>
+                    <a href="{{ url_for('items', type=category.name) }}" class="btn btn-primary">Choose</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% block content %}
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+
+    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#AddCategoryModal">
+        Add new category
+    </button>
+    <a href="{{url_for('category_manegment')}}" class="btn btn-secondary">Category management</a>
+
+    <br><br>
+    <h2>All Items</h2>
+    <a href="{{ url_for('items', type='all') }}" class="btn btn-primary">Choose</a>
+
+    <h2>Catalog</h2>
+
+    <div class="container">
+        {% for i in range(0, categories|length, 3) %}
+            {{ render_row(categories[i:i+3]) }}
+        {% endfor %}
+    </div>
+
+    <div class="modal fade" id="AddCategoryModal" tabindex="-1" aria-labelledby="Add Category" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url_for('main') }}" method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        {{ form.name.label(class="form-label") }}
+                        {{ form.name(class="form-control") }}
+                        {{ form.category_img.label(class="form-label") }}
+                        {{ form.category_img(class="form-control") }}
+                        <div class="modal-footer">
+                            {{ form.submit(class="btn btn-primary") }}
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+<style>
+    .card-img-custom {
+        object-fit: cover; 
+    }
+</style>

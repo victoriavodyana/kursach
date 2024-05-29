@@ -1,0 +1,106 @@
+
+    
+{% extends 'index.html' %}
+
+{% block content %}
+    {% for message in get_flashed_messages() %}
+	
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+
+    {% endfor %}
+
+
+
+    <h2>Add Item</h2>
+    <br/>
+    <div class="shadow p-3 mb-5 bg-body rounded">
+	    <form method="POST" enctype="multipart/form-data">
+		    
+            {{ form.hidden_tag() }}
+
+            {{ form.item_model.label(class="form-label") }}
+
+            {{ form.item_model(class="form-control") }}
+            <br/>
+            {{ form.item_model_id.label(class="form-label") }}
+            {{ form.item_model_id(class="form-control") }}
+            {% for error in form.item_model_id.errors %}
+                 <div class="alert alert-warning" role="alert">
+                    {{ error }}
+                  </div>
+            {% endfor %}
+            <br/>
+            {{ form.category.label(class="form-label") }}
+            {{ form.category(class="form-control") }}
+
+            <br/>
+            {{ form.price.label(class="form-label") }}
+            {{ form.price(class="form-control") }}
+            {% for error in form.price.errors %}
+                 <div class="alert alert-warning" role="alert">
+                    {{ error }}
+                  </div>
+            {% endfor %}
+
+            <br/>
+            {{ form.producing_country.label(class="form-label") }}
+            {{ form.producing_country(class="form-control") }}
+            <br/>
+            {{ form.producing_country_id.label(class="form-label") }}
+            {{ form.producing_country_id(class="form-control") }}
+            {% for error in form.producing_country_id.errors %}
+                 <div class="alert alert-warning" role="alert">
+                    {{ error }}
+                  </div>
+            {% endfor %}
+            <br/>
+            {{ form.colour.label(class="form-label") }}
+            {{ form.colour(class="form-control") }}
+            <br/>
+            {{ form.manufacturer.label(class="form-label") }}
+            {{ form.manufacturer(class="form-control") }}
+            <br/>
+            {{ form.manufacturer_id.label(class="form-label") }}
+            {{ form.manufacturer_id(class="form-control") }}
+            {% for error in form.manufacturer_id.errors %}
+                 <div class="alert alert-warning" role="alert">
+                    {{ error }}
+                  </div>
+            {% endfor %}
+            <br/>
+            {{ form.amount.label(class="form-label") }}
+            {{ form.amount(class="form-control") }}
+            {% for error in form.amount.errors %}
+                 <div class="alert alert-warning" role="alert">
+                    {{ error }}
+                  </div>
+            {% endfor %}
+            <br/>
+            {{ form.place.label(class="form-label") }}
+            {{ form.place(class="form-control") }}
+            <br/>
+            {{ form.img.label(class="form-label") }}
+            {{ form.img(class="form-control") }}
+            <br/>
+        
+            {{ form.submit(class="btn btn-primary") }}
+
+
+
+        </form>
+
+
+    </div>
+    <br/>
+    <br/>
+    
+
+
+
+
+
+{% endblock %}

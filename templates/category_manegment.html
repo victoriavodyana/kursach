@@ -1,0 +1,61 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+    {% for message in get_flashed_messages() %}
+        
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        
+    {% endfor %}
+
+
+    <h2> Categories </h2>
+    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#AddCategoryModal">
+        Add new category
+    </button>
+    <br>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+                <tr>
+                    <th>{{ category.name }}</th>
+                    <th><a href="{{ url_for('specific_category', name=category.name) }}" class="btn btn-primary">Actions</a></th>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="AddCategoryModal" tabindex="-1" aria-labelledby="Add Category" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url_for('category_manegment') }}" method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        {{ form.name.label(class="form-label") }}
+                        {{ form.name(class="form-control") }}
+                        {{ form.category_img.label(class="form-label") }}
+                        {{ form.category_img(class="form-control") }}
+                        <div class="modal-footer">
+                            {{ form.submit(class="btn btn-primary") }}
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

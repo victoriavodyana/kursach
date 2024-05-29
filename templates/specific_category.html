@@ -1,0 +1,94 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
+    <br/>
+
+    <div class="card">
+        <div class="card-header">
+            Category {{ category.name }}
+        </div>
+        <div class="card-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-8">
+                        <strong>Name:</strong>
+                        {{ category.name }}<br/>
+
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#UpdateCatModal">
+                            Update Category
+                        </button>
+
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#DeleteModal">
+                            Delete Category
+                        </button>
+
+                        <br/><br/>
+                    </div>
+                    <div class="col-4">
+                        {% if category.category_img %}
+                            <img src="{{ url_for('static', filename='categories/' + category.category_img) }}" class="card-img-top card-img-custom" width="200" align="right">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='img/item_icon.png') }}" width="200" align="right">
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="Deleting Item" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Deleting Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are You Sure You Want To Delete Category?</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="{{ url_for('delete_category', name=category.name) }}" class="btn btn-danger">Delete Category</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Modal -->
+    <div class="modal fade" id="UpdateCatModal" tabindex="-1" aria-labelledby="Departure" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ url_for('specific_category', name=category.name) }}" method="POST" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            {{ form.name.label(class="form-label") }}
+                            {{ form.name(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.category_img.label(class="form-label") }}
+                            {{ form.category_img(class="form-control") }}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {{ form.submit(class="btn btn-primary") }}
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

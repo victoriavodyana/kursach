@@ -1,0 +1,129 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    {% for message in get_flashed_messages() %}
+        
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        
+    {% endfor %}
+
+	<br/>
+
+<div class="card">
+    <div class="card-header">
+        Customer: {{ customer.first_name }} {{ customer.last_name }}
+    </div>
+    <div class="card-body">
+
+         <p class="card-text">
+
+            <div class="container">
+                <div class="row">
+                    <div class="col-8">
+
+                        <strong>Customer Id:</strong>
+                        {{ customer.id }}<br/>
+
+                        <strong>First Name:</strong>
+                        {{ customer.first_name }}<br/>
+
+                        <strong>Last Name:</strong>
+                        {{ customer.last_name }}<br/>
+
+                        <strong>Email:</strong>
+                        {{ customer.email }}<br/>
+
+                        <strong>Phone:</strong>
+                        {{ customer.phone }}<br/>
+
+                        <strong>City:</strong>
+                        {{ customer.city }}<br/>
+
+    
+                        <br/>
+                        <br/>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#UpdateCustomerModal">
+                            Update Customer
+                        </button>
+
+
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#DeleteModal">
+                            Delete Customer
+                        </button>
+                        <br/><br/>
+
+
+                    </div>
+                    <div class="col-4">
+
+                        <img src="{{ url_for('static', filename='img/user.jpg' )}}" width="200" align="right">
+
+                    </div>
+                </div>
+            </div>
+        </p>
+
+
+    </div>
+</div>
+
+<div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="Deleting Item" aria-hidden="true">>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Deleting Customer</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are You Sure You Want To Delete Customer?</p>
+        </div>
+        <div class="modal-footer">
+          <a href="{{url_for('delete_customer', id = customer.id)}}" class="btn btn-danger">Delete Customer</a>
+          <a class="btn btn-secondary" data-bs-dismiss="modal">Close</a>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="UpdateCustomerModal" tabindex="-1" aria-labelledby="Update Amount" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Customer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{url_for('specific_customer', id = customer.id)}}" method="POST">
+                    {{ form.hidden_tag() }}
+
+                    {{ form.first_name.label(class="form-label") }}
+                    {{ form.first_name(class="form-control") }}
+
+                    {{ form.last_name.label(class="form-label") }}
+                    {{ form.last_name(class="form-control") }}
+
+                    {{ form.email.label(class="form-label") }}
+                    {{ form.email(class="form-control") }}
+
+                    {{ form.phone.label(class="form-label") }}
+                    {{ form.phone(class="form-control") }}
+
+                    {{ form.city.label(class="form-label") }}
+                    {{ form.city(class="form-control") }}
+
+                    <div class="modal-footer">
+                        {{ form.submit(class="btn btn-primary") }}
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
